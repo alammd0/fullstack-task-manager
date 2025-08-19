@@ -11,6 +11,7 @@ datasource db {
 
 model User {
   id        Int      @id @default(autoincrement())
+  name      String
   email     String   @unique
   password  String
   role      userRole @default(User)
@@ -28,7 +29,7 @@ model Task {
   dueDate     DateTime
   assignedTo  Int?
   user        User?    @relation(fields: [assignedTo], references: [id])
-  documents   String[]  // file path
+  documents   String[] 
 }
 
 enum TaskPriority {
