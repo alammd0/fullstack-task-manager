@@ -10,7 +10,7 @@ const router = Router();
 router.post("/register", async (req, res) => {
     try{
 
-        const { name , email, password } = req.body ; 
+        const { name , email, role, password } = req.body ; 
 
         if(!name || !email || !password){
             return res.status(400).json({
@@ -39,6 +39,7 @@ router.post("/register", async (req, res) => {
             data : {
                 name : name,
                 email : email,
+                role : role ,
                 password : hashedPassword
             }
         });
@@ -105,7 +106,14 @@ router.post("/login", async (req, res) => {
 
         return res.status(200).json({
             message : "Login successful",
-            token : token
+            data : {
+                token : token,
+                user :{
+                    id : findUser.id,
+                    name : findUser.name,
+                    role : findUser.role
+                }
+            }
         });
     }
     catch(error){

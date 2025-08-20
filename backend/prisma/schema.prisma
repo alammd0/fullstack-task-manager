@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,32 +7,50 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  role      userRole @default(User)
-  tasks     Task[]
-  createdAt DateTime @default(now())
+  id            Int      @id @default(autoincrement())
+  name          String
+  email         String   @unique
+  password      String
+  role          userRole @default(User)
+  tasks         Task[]   @relation("TaskOwner")
+  assignedTasks Task[]   @relation("AssignedUser")
+  documentReads DocumentRead[]  
+  createdAt     DateTime @default(now())
 }
-
 
 model Task {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  status      TaskStatus @default(Open)
-  priority    TaskPriority @default(Low)
-  dueDate     DateTime
-  assignedTo  Int?
-  user        User?    @relation(fields: [assignedTo], references: [id])
-  documents   String[] 
+  id           Int          @id @default(autoincrement())
+  title        String
+  description  String
+  status       TaskStatus   @default(Open)
+  priority     TaskPriority @default(Low)
+  assignedTo   Int?
+  assignedUser User?        @relation("AssignedUser", fields: [assignedTo], references: [id])
+  userid       Int
+  user         User?        @relation("TaskOwner", fields: [userid], references: [id])
+  dueDate      DateTime
+  createdAt    DateTime     @default(now())
+  documents    Json?
+  documentReads DocumentRead[] 
 }
 
+model DocumentRead {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  taskId    Int
+  documentUrl String
+  readAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  task Task @relation(fields: [taskId], references: [id])
+  
+  @@unique([userId, taskId, documentUrl])
+}
+
+
 enum TaskPriority {
-  Low 
+  Low
   Medium
   High
 }
@@ -44,7 +61,7 @@ enum TaskStatus {
   Completed
 }
 
-enum userRole { 
+enum userRole {
   User
   Admin
 }
