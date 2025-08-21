@@ -95,8 +95,8 @@ All API routes are prefixed with `/api`.
 *   `GET /tasks/filter`: Get tasks based on filters (status, priority, dueDate).
 *   `GET /tasks/:id`: Get a single task by its ID.
 *   `DELETE /tasks/:id`: Delete a task by its ID.
-*   `PUT /tasks/:id/completed`: Mark a task as completed (if 80% of documents are read).
+*   `PUT /tasks/:id/completed`: Mark a task as completed
 
 ### Admin Routes (`/api/admin`)
 
-*   `GET /users`: Get a list of all users (requires admin privileges).
+*   `GET /users`: Get a list of all users
